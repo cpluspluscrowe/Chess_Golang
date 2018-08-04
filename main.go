@@ -17,6 +17,7 @@ type Color struct {
 func AddKing(position Position, color Color, board *Board) {
 	board.occupiedPositions[position] = true
 	king := King{}
+	king.Position = position
 	king.Moves = []Position{Position{-1,0},
 	Position{-1,-1},
 		Position{0,-1},
@@ -85,6 +86,30 @@ func NewBoard() Board {
 	return board
 }
 
+func (p Board) String() string {
+	array := [][]string{
+		{"-","-","-","-","-","-","-","-",},
+		{"-","-","-","-","-","-","-","-",},
+		{"-","-","-","-","-","-","-","-",},
+		{"-","-","-","-","-","-","-","-",},
+		{"-","-","-","-","-","-","-","-",},
+		{"-","-","-","-","-","-","-","-",},
+		{"-","-","-","-","-","-","-","-",},
+		{"-","-","-","-","-","-","-","-",},
+	}
+	for _, position := range p.whitePieces {
+		array[position.y][position.x] = "w"
+	}
+	for _, position := range p.blackPieces {
+		array[position.y][position.x] = "b"
+	}
+	var boardString string
+	for _, row := range array {
+		boardString += row[0] + row[1] + row[2] + row[3] + row[4] + row[5] + row[6] + row[7] + "\n"
+	}
+	return fmt.Sprintf(boardString)
+}
+
 func getPieceToMove(isBlack bool, board *Board) King {
 	var pieces []King
 	if isBlack{
@@ -96,12 +121,27 @@ func getPieceToMove(isBlack bool, board *Board) King {
 	return piece
 }
 
+func getPieceMove(piece * King) (Position, error) {
+	for _, move := range piece.Moves {
+		moveToPosition := Position{piece.Position.x + move.x, piece.Position.y + move.y}
+		if isMoveValid(moveToPosition){
+			return moveToPosition, nil
+		}
+	}
+	return Position{},nil
+}
+
 func main(){
 	board := NewBoard()
 	addRowOfKings(false, &board)
 	addRowOfKings(true, &board)
-	for i := 0; i < 10 ; i++ {
-		//blackPiece := getPieceToMove(true, &board)
-		//whitePiece := getPieceToMove(false, &board)
-	}
+	/*for i := 0; i < 10 ; i++ {
+		blackPiece := getPieceToMove(true, &board)
+		wherePieceWillMove, err := getPieceMove(&blackPiece)
+		if err != nil {
+			delete(board.occupiedPositions,blackPiece.Position)
+			board.occupiedPositions[wherePieceWillMove] = true
+		}
+	}*/
+	fmt.Println(board)
 }
