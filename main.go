@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	)
+	"math/rand"
+)
 
 type Position struct {
 	x int
@@ -14,6 +15,7 @@ type Color struct {
 }
 
 func AddKing(position Position, color Color, board *Board) {
+	board.occupiedPositions[position] = true
 	king := King{}
 	king.Moves = []Position{Position{-1,0},
 	Position{-1,-1},
@@ -83,9 +85,23 @@ func NewBoard() Board {
 	return board
 }
 
+func getPieceToMove(isBlack bool, board *Board) King {
+	var pieces []King
+	if isBlack{
+		pieces = board.blackPieces
+	}else{
+		pieces = board.whitePieces
+	}
+	piece := pieces[rand.Intn(len(pieces))]
+	return piece
+}
+
 func main(){
 	board := NewBoard()
 	addRowOfKings(false, &board)
 	addRowOfKings(true, &board)
-	fmt.Println(board)
+	for i := 0; i < 10 ; i++ {
+		//blackPiece := getPieceToMove(true, &board)
+		//whitePiece := getPieceToMove(false, &board)
+	}
 }
