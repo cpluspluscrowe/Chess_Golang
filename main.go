@@ -49,14 +49,19 @@ func (p King) String() string {
 	return fmt.Sprintf("{Color:%s, Position:[%d, %d]}", color, p.Position.y, p.Position.x)
 }
 
-func isMoveValid(position Position) bool {
+func isMoveValid(position Position, board *Board) bool {
 	if position.x < 0 || position.x > 7 {
 		return false
 	}
 	if position.y < 0 || position.y > 7 {
 		return false
 	}
-	return true
+	ok, _ := board.occupiedPositions[position]
+	if !ok {
+		return true
+	}else{
+		return false
+	}
 }
 
 func addRowOfKings(isBlack bool, board *Board){
@@ -110,38 +115,44 @@ func (p Board) String() string {
 	return fmt.Sprintf(boardString)
 }
 
-func getPieceToMove(isBlack bool, board *Board) King {
-	var pieces []King
+func getPieceToMove(isBlack bool, board *Board) *King {
+	var pieces *[]King
 	if isBlack{
-		pieces = board.blackPieces
+		pieces = &board.blackPieces
 	}else{
-		pieces = board.whitePieces
+		pieces = &board.whitePieces
 	}
-	piece := pieces[rand.Intn(len(pieces))]
+	piece := &(*pieces)[rand.Intn(len(*pieces))]
 	return piece
 }
 
-func getPieceMove(piece * King) (Position, error) {
+func getPieceMove(piece * King, board *Board) (Position, error) {
 	for _, move := range piece.Moves {
 		moveToPosition := Position{piece.Position.x + move.x, piece.Position.y + move.y}
-		if isMoveValid(moveToPosition){
+		if isMoveValid(moveToPosition, board){
 			return moveToPosition, nil
 		}
 	}
-	return Position{},nil
+	return Position{},fmt.Errorf("No moves are valid for this piece")
+}
+
+func movePiece(color Color, board *Board){
+	blackPiece := getPieceToMove(color.isBlack, board)
+	wherePieceWillMove, isMoveValid := getPieceMove(blackPiece, board)
+	if isMoveValid == nil {
+		delete(board.occupiedPositions,blackPiece.Position)
+		board.occupiedPositions[wherePieceWillMove] = true
+		blackPiece.Position = wherePieceWillMove
+	}
 }
 
 func main(){
 	board := NewBoard()
 	addRowOfKings(false, &board)
 	addRowOfKings(true, &board)
-	/*for i := 0; i < 10 ; i++ {
-		blackPiece := getPieceToMove(true, &board)
-		wherePieceWillMove, err := getPieceMove(&blackPiece)
-		if err != nil {
-			delete(board.occupiedPositions,blackPiece.Position)
-			board.occupiedPositions[wherePieceWillMove] = true
-		}
-	}*/
+	for i := 0; i < 100 ; i++ {
+		movePiece(Color{true}, &board)
+		movePiece(Color{false}, &board)
+	}
 	fmt.Println(board)
 }
