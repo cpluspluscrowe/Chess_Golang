@@ -14,7 +14,7 @@ type Color struct {
 	isBlack bool
 }
 
-func AddKing(position Position, color Color, board *Board) {
+func (board *Board) AddKing(position Position, color Color, setAsCheckmateKing bool) {
 	board.occupiedPositions[position] = true
 	king := King{}
 	king.Position = position
@@ -30,6 +30,9 @@ func AddKing(position Position, color Color, board *Board) {
 		board.blackPieces = append(board.blackPieces, king)
 	}else{
 		board.whitePieces = append(board.whitePieces, king)
+	}
+	if setAsCheckmateKing {
+		board.setCheckmateKing(color, &king)
 	}
 }
 
@@ -73,7 +76,11 @@ func addRowOfKings(isBlack bool, board *Board){
 	}
 	for i := 0; i < 8; i++ {
 		position := Position{x:i,y:row}
-		AddKing(position, Color{isBlack: isBlack}, board)
+		if i == 0 {
+			board.AddKing(position, Color{isBlack: isBlack}, true)
+		}else{
+			board.AddKing(position, Color{isBlack: isBlack}, false)
+		}
 	}
 }
 
@@ -81,6 +88,16 @@ type Board struct{
 	occupiedPositions map[Position]bool
 	whitePieces []King
 	blackPieces []King
+	whiteCheckmateKing *King
+	blackCheckmateKing *King
+}
+
+func (board *Board) setCheckmateKing(color Color, king *King){
+	if king.Color.isBlack {
+		board.blackCheckmateKing = king
+	}else{
+		board.whiteCheckmateKing = king
+	}
 }
 
 func NewBoard() Board {
@@ -88,6 +105,8 @@ func NewBoard() Board {
 	board.occupiedPositions = make(map[Position]bool)
 	board.blackPieces = []King{}
 	board.whitePieces = []King{}
+	board.whiteCheckmateKing = nil
+	board.blackCheckmateKing = nil
 	return board
 }
 
@@ -150,7 +169,7 @@ func main(){
 	board := NewBoard()
 	addRowOfKings(false, &board)
 	addRowOfKings(true, &board)
-	for i := 0; i < 100 ; i++ {
+	for i := 0; i < 1000 ; i++ {
 		movePiece(Color{true}, &board)
 		movePiece(Color{false}, &board)
 	}

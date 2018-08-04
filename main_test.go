@@ -19,7 +19,7 @@ func TestSetup(t *testing.T){
 
 func TestThatPositionIsOccupiedAfterAddingPiece(t *testing.T){
 	board := NewBoard()
-	AddKing(Position{1,1}, Color{true}, &board)
+	board.AddKing(Position{1,1}, Color{true}, false)
 	ok, _ := board.occupiedPositions[Position{1,1}]
 	if ok {
 		fmt.Errorf("Position should be occupied")
@@ -28,11 +28,33 @@ func TestThatPositionIsOccupiedAfterAddingPiece(t *testing.T){
 
 func TestThatPositionIsOccupiedAfterAddingPiece2(t *testing.T){
 	board := NewBoard()
-	AddKing(Position{1,1}, Color{true}, &board)
+	board.AddKing(Position{1,1}, Color{true}, false)
 	piece := board.blackPieces[0]
 	ok, _ := board.occupiedPositions[piece.Position]
 	if ok {
 		fmt.Errorf("Position should be occupied")
+	}
+}
+
+func TestSettingCheckmateKing(t *testing.T){
+	board := NewBoard()
+	board.AddKing(Position{1,1},Color{true}, false)
+	king := &board.blackPieces[0]
+	board.setCheckmateKing(Color{true}, king)
+	if board.blackCheckmateKing == nil {
+		fmt.Errorf("Should have set the black check mate king")
+	}
+}
+
+func TestSettingCheckmateKing2(t *testing.T){
+	board := NewBoard()
+	board.AddKing(Position{1,1},Color{true}, true)
+	if board.blackCheckmateKing == nil {
+		fmt.Errorf("Should have set the black check mate king")
+	}
+	board.AddKing(Position{1,1},Color{false}, true)
+	if board.whiteCheckmateKing == nil {
+		fmt.Errorf("Should have set the black check mate king")
 	}
 }
 
