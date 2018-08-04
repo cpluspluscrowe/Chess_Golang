@@ -6,11 +6,14 @@ import (
 )
 
 func TestSetup(t *testing.T){
-	pieces := []King{}
-	addRowOfKings(false, &pieces)
-	addRowOfKings(true, &pieces)
-	if len(pieces) != 14 {
-		fmt.Errorf("lenth should be 14, was equal to: %d", len(pieces))
+	board := NewBoard()
+	addRowOfKings(false, &board)
+	addRowOfKings(true, &board)
+	if len(board.whitePieces) != 7 {
+		fmt.Errorf("lenth should be 7, was equal to: %d", len(board.whitePieces))
+	}
+	if len(board.blackPieces) != 7 {
+		fmt.Errorf("lenth should be 7, was equal to: %d", len(board.blackPieces))
 	}
 }
 

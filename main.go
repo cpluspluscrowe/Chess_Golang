@@ -13,7 +13,7 @@ type Color struct {
 	isBlack bool
 }
 
-func NewKing(position Position, color Color) King {
+func AddKing(position Position, color Color, board *Board) {
 	king := King{}
 	king.Moves = []Position{Position{-1,0},
 	Position{-1,-1},
@@ -23,7 +23,11 @@ func NewKing(position Position, color Color) King {
 		Position{1,1},
 		Position{0,1},
 		Position{-1,1}}
-	return king
+	if color.isBlack {
+		board.blackPieces = append(board.blackPieces, king)
+	}else{
+		board.whitePieces = append(board.whitePieces, king)
+	}
 }
 
 type King struct {
@@ -52,7 +56,7 @@ func isMoveValid(position Position) bool {
 	return true
 }
 
-func addRowOfKings(isBlack bool, pieces *[]King){
+func addRowOfKings(isBlack bool, board *Board){
 	var row int
 	if isBlack {
 		row = 0
@@ -61,30 +65,27 @@ func addRowOfKings(isBlack bool, pieces *[]King){
 	}
 	for i := 0; i < 8; i++ {
 		position := Position{x:i,y:row}
-		piece := NewKing(position, Color{isBlack: isBlack})
-		*pieces = append(*pieces, piece)
+		AddKing(position, Color{isBlack: isBlack}, board)
 	}
 }
 
 type Board struct{
 	occupiedPositions map[Position]bool
-	pieces []King
+	whitePieces []King
+	blackPieces []King
 }
 
 func NewBoard() Board {
 	board := Board{}
 	board.occupiedPositions = make(map[Position]bool)
-	board.pieces = []King{}
+	board.blackPieces = []King{}
+	board.whitePieces = []King{}
 	return board
 }
 
 func main(){
 	board := NewBoard()
-
-
-	addRowOfKings(false, &board.pieces)
-	addRowOfKings(true, &board.pieces)
-	for _, piece := range board.pieces {
-		fmt.Println(piece)
-	}
+	addRowOfKings(false, &board)
+	addRowOfKings(true, &board)
+	fmt.Println(board)
 }
