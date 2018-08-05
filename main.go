@@ -98,11 +98,17 @@ func (p Board) String() string {
 	return fmt.Sprintf(playerString)
 }
 
+type PossibleMove struct {
+	wouldTakePiece bool
+	Position
+}
+
 type Player struct{
 	occupiedPositions map[Position]bool
 	pieces []King
 	checkmateKing *King
 	Color
+	AvailableMoves []PossibleMove
 }
 
 func (player *Player) setCheckmateKing(king *King){
