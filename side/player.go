@@ -37,9 +37,16 @@ func (player *Player) AddKing(position movement.Position, setAsCheckmateKing boo
 		player.SetCheckmateKing(king)
 	}
 }
-func (player *Player) MovePiece(king *piece.King,xChange int, yChange int){
+func (player *Player) MovePieceXY(king *piece.King,xChange int, yChange int){
 	king.Position.X = king.Position.X + xChange
 	king.Position.Y = king.Position.Y + yChange
+	if !player.IsMoveValid(king.Position) {
+		fmt.Errorf("Move is not valid. New movement: %d", king.Position)
+	}
+}
+
+func (player *Player) MovePieceToPosition(king *piece.King,position movement.Position){
+	king.Position = position
 	if !player.IsMoveValid(king.Position) {
 		fmt.Errorf("Move is not valid. New movement: %d", king.Position)
 	}

@@ -5,6 +5,7 @@ import (
 			"Chess/side"
 	"Chess/movement"
 	"Chess/color"
+	"Chess/piece"
 )
 
 type Board struct {
@@ -68,4 +69,11 @@ func (b *Board) IsPositionOccupied(position movement.Position, colorTakingPiece 
 	}
 	verifyOtherPlayerHasPiece, _ := sideToRemovePieceFrom.OccupiedPositions[position]
 	return verifyOtherPlayerHasPiece
+}
+
+func (b *Board) MovePiece(player *side.Player, king *piece.King, newPosition movement.Position){
+	player.MovePieceToPosition(king, newPosition)
+	if b.IsPositionOccupied(newPosition, player.Color){
+		b.RemovePiece(newPosition, player.Color)
+	}
 }

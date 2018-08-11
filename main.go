@@ -15,7 +15,7 @@ func main(){
 	white.AddRowOfKings(7)
 	fmt.Println(board)
 
-	black.MovePiece(black.Pieces[0],1,1)
+	black.MovePieceXY(black.Pieces[0],1,1)
 
 	fmt.Println(board)
 }
