@@ -58,22 +58,30 @@ func (b *Board) RemovePiece(position movement.Position, colorTakingPiece color.C
 	delete(sideToRemovePieceFrom.OccupiedPositions, position)
 }
 
-func (b *Board) IsPositionOccupied(position movement.Position, colorTakingPiece color.Color) bool {
-	var sideToRemovePieceFrom *side.Player = nil
-	if(b.white.Color == colorTakingPiece){
-		sideToRemovePieceFrom = b.black
-	}else if(b.black.Color == colorTakingPiece){
-		sideToRemovePieceFrom = b.white
-	}else{
-		panic("Given color did not match either piece")
-	}
+func (b *Board) IsPositionOccupied(position movement.Position, playerTakingPiece *side.Player) bool {
+	var sideToRemovePieceFrom *side.Player = b.getOpponent(playerTakingPiece)
 	verifyOtherPlayerHasPiece, _ := sideToRemovePieceFrom.OccupiedPositions[position]
 	return verifyOtherPlayerHasPiece
 }
 
 func (b *Board) MovePiece(player *side.Player, king *piece.King, newPosition movement.Position){
 	player.MovePieceToPosition(king, newPosition)
-	if b.IsPositionOccupied(newPosition, player.Color){
+	if b.IsPositionOccupied(newPosition, player){
 		b.RemovePiece(newPosition, player.Color)
 	}
+}
+
+func (b *Board) getOpponent(player *side.Player) *side.Player {
+	var opponent *side.Player = nil
+	if(player.Color.IsBlack){
+		opponent = b.white
+	}else{
+		opponent = b.black
+	}
+	return opponent
+}
+
+func (b *Board) GetBestMove(player *side.Player){
+	opponent := b.getOpponent(player)
+	player.CalculateBestMove(opponent.OccupiedPositions)
 }
