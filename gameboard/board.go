@@ -40,6 +40,7 @@ func (p Board) String() string {
 	return fmt.Sprintf(playerString)
 }
 
+// will throw exception is there is not a piece to remove
 func (b *Board) RemovePiece(position movement.Position, colorTakingPiece color.Color){
 	var sideToRemovePieceFrom *side.Player = nil
 	if(b.white.Color == colorTakingPiece){
@@ -49,9 +50,22 @@ func (b *Board) RemovePiece(position movement.Position, colorTakingPiece color.C
 	}else{
 		panic("Given color did not match either piece")
 	}
-	verifyOtherPlayerHasPiece, err := sideToRemovePieceFrom.OccupiedPositions[position]
+	verifyOtherPlayerHasPiece, _ := sideToRemovePieceFrom.OccupiedPositions[position]
 	if !verifyOtherPlayerHasPiece {
-		panic(err)
+		panic("No piece at this location to remove!")
 	}
 	delete(sideToRemovePieceFrom.OccupiedPositions, position)
+}
+
+func (b *Board) IsPositionOccupied(position movement.Position, colorTakingPiece color.Color) bool {
+	var sideToRemovePieceFrom *side.Player = nil
+	if(b.white.Color == colorTakingPiece){
+		sideToRemovePieceFrom = b.black
+	}else if(b.black.Color == colorTakingPiece){
+		sideToRemovePieceFrom = b.white
+	}else{
+		panic("Given color did not match either piece")
+	}
+	verifyOtherPlayerHasPiece, _ := sideToRemovePieceFrom.OccupiedPositions[position]
+	return verifyOtherPlayerHasPiece
 }
