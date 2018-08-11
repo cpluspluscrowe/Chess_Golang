@@ -2,21 +2,10 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
-	"Chess/piece"
 	"Chess/side"
 	"Chess/color"
 	"Chess/gameboard"
 )
-
-
-
-func getPieceToMove(player *side.Player) *piece.King {
-	var pieces *[]*piece.King
-	pieces = &player.Pieces
-	piece := (*pieces)[rand.Intn(len(*pieces))]
-	return piece
-}
 
 func main(){
 	var black = side.NewPlayer(color.Color{true})

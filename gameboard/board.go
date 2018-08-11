@@ -3,6 +3,8 @@ package gameboard
 import (
 	"fmt"
 			"Chess/side"
+	"Chess/movement"
+	"Chess/color"
 )
 
 type Board struct {
@@ -38,3 +40,18 @@ func (p Board) String() string {
 	return fmt.Sprintf(playerString)
 }
 
+func (b *Board) RemovePiece(position movement.Position, colorTakingPiece color.Color){
+	var sideToRemovePieceFrom *side.Player = nil
+	if(b.white.Color == colorTakingPiece){
+		sideToRemovePieceFrom = b.black
+	}else if(b.black.Color == colorTakingPiece){
+		sideToRemovePieceFrom = b.white
+	}else{
+		panic("Given color did not match either piece")
+	}
+	verifyOtherPlayerHasPiece, err := sideToRemovePieceFrom.OccupiedPositions[position]
+	if !verifyOtherPlayerHasPiece {
+		panic(err)
+	}
+	delete(sideToRemovePieceFrom.OccupiedPositions, position)
+}
