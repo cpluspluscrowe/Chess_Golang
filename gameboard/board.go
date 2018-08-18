@@ -4,7 +4,6 @@ import (
 	"fmt"
 			"Chess/side"
 	"Chess/movement"
-	"Chess/color"
 	"Chess/piece"
 )
 
@@ -42,15 +41,8 @@ func (p Board) String() string {
 }
 
 // will throw exception is there is not a piece to remove
-func (b *Board) RemovePiece(position movement.Position, colorTakingPiece color.Color){
-	var sideToRemovePieceFrom *side.Player = nil
-	if(b.white.Color == colorTakingPiece){
-		sideToRemovePieceFrom = b.black
-	}else if(b.black.Color == colorTakingPiece){
-		sideToRemovePieceFrom = b.white
-	}else{
-		panic("Given color did not match either piece")
-	}
+func (b *Board) RemovePiece(position movement.Position, playerTakingPiece *side.Player){
+	var sideToRemovePieceFrom *side.Player = b.getOpponent(playerTakingPiece)
 	verifyOtherPlayerHasPiece, _ := sideToRemovePieceFrom.OccupiedPositions[position]
 	if !verifyOtherPlayerHasPiece {
 		panic("No piece at this location to remove!")
@@ -67,7 +59,7 @@ func (b *Board) IsPositionOccupied(position movement.Position, playerTakingPiece
 func (b *Board) MovePiece(player *side.Player, king *piece.King, newPosition movement.Position){
 	player.MovePieceToPosition(king, newPosition)
 	if b.IsPositionOccupied(newPosition, player){
-		b.RemovePiece(newPosition, player.Color)
+		b.RemovePiece(newPosition, player)
 	}
 }
 
@@ -83,5 +75,9 @@ func (b *Board) getOpponent(player *side.Player) *side.Player {
 
 func (b *Board) GetBestMove(player *side.Player){
 	opponent := b.getOpponent(player)
-	player.CalculateBestMove(opponent.OccupiedPositions)
+	move, king := player.CalculateBestMove(opponent.OccupiedPositions)
+	if(b.IsPositionOccupied(move, player)){
+		b.RemovePiece(move, player)
+	}
+	b.MovePiece(player, king, move)
 }

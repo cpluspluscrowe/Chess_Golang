@@ -71,20 +71,22 @@ func (player *Player) IsMoveValid(position movement.Position) bool {
 		return false
 	}
 	ok, _ := player.OccupiedPositions[position]
-	if !ok {
-		return true
-	}else{
+	if ok {
 		return false
 	}
+	return true
 }
 
 func (player *Player) CalculateBestMove(movesOccupiedByOtherColor map[movement.Position]bool) (movement.Position, *piece.King){
 	var kingToMove *piece.King = nil
 	var bestMove movement.Position
 	for _,king := range player.Pieces {
-		for move, _ := range king.Moves {
-			fmt.Println(move)
+		for _, move := range king.Moves {
+			if player.IsMoveValid(move){
+				return move, king
+			}
 		}
 	}
+	fmt.Errorf("Player is unable to move!  Player: %d", player.Color)
 	return bestMove, kingToMove
 }
