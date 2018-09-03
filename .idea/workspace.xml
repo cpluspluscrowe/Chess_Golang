@@ -2,16 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="99d8a665-adb4-46c8-b7b4-0d2799a011d5" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/gameboard/board_test.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/color/color.go" beforeDir="false" afterPath="$PROJECT_DIR$/color/color.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gameboard/board.go" beforeDir="false" afterPath="$PROJECT_DIR$/gameboard/board.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/main_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/movement/position.go" beforeDir="false" afterPath="$PROJECT_DIR$/movement/position.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/piece/king.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/piece/king_test.go" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/side/player.go" beforeDir="false" afterPath="$PROJECT_DIR$/side/player.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/side/player_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/side/player_test.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -44,12 +37,12 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="go" value="15158" />
+          <entry key="go" value="15901" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Go" value="15158" />
+          <entry key="Go" value="15901" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.go.postfix.template.usages.trigger">
@@ -61,11 +54,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="16" column="48" selection-start-line="16" selection-start-column="48" selection-end-line="16" selection-end-column="48" />
+            <state relative-caret-position="165">
+              <caret line="17" column="22" selection-start-line="17" selection-start-column="22" selection-end-line="17" selection-end-column="22" />
             </state>
           </provider>
         </entry>
@@ -82,8 +75,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gameboard/board.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="80" column="48" lean-forward="true" selection-start-line="80" selection-start-column="48" selection-end-line="80" selection-end-column="48" />
+            <state relative-caret-position="230">
+              <caret line="88" column="23" selection-start-line="88" selection-start-column="23" selection-end-line="88" selection-end-column="23" />
             </state>
           </provider>
         </entry>
@@ -91,8 +84,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gameboard/board_test.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="183">
-              <caret line="40" column="5" lean-forward="true" selection-start-line="40" selection-start-column="5" selection-end-line="40" selection-end-column="5" />
+            <state relative-caret-position="228">
+              <caret line="43" selection-start-line="43" selection-end-line="50" selection-end-column="1" />
               <folding>
                 <element signature="e#19#54#0" expanded="true" />
               </folding>
@@ -112,8 +105,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/side/player.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="246">
-              <caret line="46" column="41" lean-forward="true" selection-start-line="46" selection-start-column="41" selection-end-line="46" selection-end-column="41" />
+            <state relative-caret-position="123">
+              <caret line="61" column="22" lean-forward="true" selection-start-line="61" selection-start-column="22" selection-end-line="61" selection-end-column="22" />
               <folding>
                 <element signature="e#14#64#0" expanded="true" />
               </folding>
@@ -121,11 +114,14 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/side/player_test.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="1" selection-start-line="1" selection-end-line="1" />
+            <state relative-caret-position="210">
+              <caret line="14" column="26" selection-start-line="14" selection-start-column="26" selection-end-line="14" selection-end-column="26" />
+              <folding>
+                <element signature="e#14#68#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -161,6 +157,7 @@
       <find>NewKing</find>
       <find>ok,</find>
       <find>Avail</find>
+      <find>] = true</find>
     </findStrings>
     <replaceStrings>
       <replace>player</replace>
@@ -170,6 +167,8 @@
       <replace>position.Position</replace>
       <replace>SetCheckmateKing</replace>
       <replace>Pieces</replace>
+      <replace>player.AddToPotentialMovesIfMoveIsValid(</replace>
+      <replace>,&amp;potentialPositions)</replace>
     </replaceStrings>
   </component>
   <component name="GOROOT" path="/usr/local/Cellar/go/1.10.1/libexec" />
@@ -188,7 +187,6 @@
         <option value="$PROJECT_DIR$/position/position.go" />
         <option value="$PROJECT_DIR$/board/board.go" />
         <option value="$PROJECT_DIR$/player/player.go" />
-        <option value="$PROJECT_DIR$/side/player_test.go" />
         <option value="$PROJECT_DIR$/piece/king.go" />
         <option value="$PROJECT_DIR$/piece/king_test.go" />
         <option value="$PROJECT_DIR$/pieces/king.go" />
@@ -196,9 +194,10 @@
         <option value="$PROJECT_DIR$/color/color.go" />
         <option value="$PROJECT_DIR$/movement/position.go" />
         <option value="$PROJECT_DIR$/gameboard/board_test.go" />
-        <option value="$PROJECT_DIR$/side/player.go" />
         <option value="$PROJECT_DIR$/gameboard/board.go" />
         <option value="$PROJECT_DIR$/main.go" />
+        <option value="$PROJECT_DIR$/side/player.go" />
+        <option value="$PROJECT_DIR$/side/player_test.go" />
       </list>
     </option>
   </component>
@@ -282,7 +281,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Go Build.go build main.go">
+  <component name="RunManager" selected="Go Test.TestVerifyThatOldPositionIsOccupied in Chess/side">
     <configuration name="go build main.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="Chess" />
       <working_directory value="$PROJECT_DIR$/" />
@@ -329,44 +328,36 @@
       <pattern value="^TestThatTheBoardIdentifiesThatThePositionIsNotOccupiedWithOtherPiecesOnTheBoard$" />
       <method v="2" />
     </configuration>
-    <configuration name="main_test.go" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+    <configuration name="TestVerifyThatOldPositionIsOccupied in Chess/side" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="Chess" />
-      <working_directory value="$PROJECT_DIR$" />
+      <working_directory value="$PROJECT_DIR$/side" />
       <go_parameters value="-i" />
       <framework value="gotest" />
-      <kind value="FILE" />
-      <package value="Chess" />
+      <kind value="PACKAGE" />
+      <package value="Chess/side" />
       <directory value="$PROJECT_DIR$/" />
-      <filePath value="$PROJECT_DIR$/main_test.go" />
+      <filePath value="$PROJECT_DIR$/" />
+      <pattern value="^TestVerifyThatOldPositionIsOccupied$" />
       <method v="2" />
     </configuration>
     <list>
       <item itemvalue="Go Build.go build main.go" />
-      <item itemvalue="Go Test.main_test.go" />
       <item itemvalue="Go Test.TestIfPositionIsAlreadyOccupied in Chess/gameboard" />
       <item itemvalue="Go Test.TestThatTheBoardIdentifiesThatThePositionIsNotOccupied in Chess/gameboard" />
       <item itemvalue="Go Test.TestThatTheBoardIdentifiesThatThePositionIsNotOccupiedWithOtherPiecesOnTheBoard in Chess/gameboard" />
+      <item itemvalue="Go Test.TestVerifyThatOldPositionIsOccupied in Chess/side" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Go Test.TestVerifyThatOldPositionIsOccupied in Chess/side" />
         <item itemvalue="Go Build.go build main.go" />
         <item itemvalue="Go Test.TestThatTheBoardIdentifiesThatThePositionIsNotOccupiedWithOtherPiecesOnTheBoard in Chess/gameboard" />
         <item itemvalue="Go Test.TestThatTheBoardIdentifiesThatThePositionIsNotOccupied in Chess/gameboard" />
         <item itemvalue="Go Test.TestIfPositionIsAlreadyOccupied in Chess/gameboard" />
-        <item itemvalue="Go Test.main_test.go" />
       </list>
     </recent_temporary>
   </component>
   <component name="TestHistory">
-    <history-entry file="king_test_go - 2018.08.10 at 20h 16m 09s.xml">
-      <configuration name="king_test.go" configurationId="GoTestRunConfiguration" />
-    </history-entry>
-    <history-entry file="king_test_go - 2018.08.10 at 20h 16m 23s.xml">
-      <configuration name="king_test.go" configurationId="GoTestRunConfiguration" />
-    </history-entry>
-    <history-entry file="king_test_go - 2018.08.10 at 20h 16m 32s.xml">
-      <configuration name="king_test.go" configurationId="GoTestRunConfiguration" />
-    </history-entry>
     <history-entry file="king_test_go - 2018.08.10 at 20h 16m 55s.xml">
       <configuration name="king_test.go" configurationId="GoTestRunConfiguration" />
     </history-entry>
@@ -388,6 +379,15 @@
     <history-entry file="TestThatTheBoardIdentifiesThatThePositionIsNotOccupiedWithOtherPiecesOnTheBoard_in_Chess_gameboard - 2018.09.03 at 08h 35m 26s.xml">
       <configuration name="TestThatTheBoardIdentifiesThatThePositionIsNotOccupiedWithOtherPiecesOnTheBoard in Chess/gameboard" configurationId="GoTestRunConfiguration" />
     </history-entry>
+    <history-entry file="TestVerifyThatOldPositionIsOccupied_in_Chess_side - 2018.09.03 at 09h 53m 38s.xml">
+      <configuration name="TestVerifyThatOldPositionIsOccupied in Chess/side" configurationId="GoTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="TestVerifyThatOldPositionIsOccupied_in_Chess_side - 2018.09.03 at 10h 00m 31s.xml">
+      <configuration name="TestVerifyThatOldPositionIsOccupied in Chess/side" configurationId="GoTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="TestVerifyThatOldPositionIsOccupied_in_Chess_side - 2018.09.03 at 10h 00m 39s.xml">
+      <configuration name="TestVerifyThatOldPositionIsOccupied in Chess/side" configurationId="GoTestRunConfiguration" />
+    </history-entry>
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="797" extended-state="6" />
@@ -405,7 +405,7 @@
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="8" />
-      <window_info anchor="bottom" id="Terminal" order="9" />
+      <window_info anchor="bottom" id="Terminal" order="9" weight="0.32907802" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -440,27 +440,41 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/color/color.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="1" lean-forward="true" selection-start-line="8" selection-start-column="1" selection-end-line="8" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gameboard/board.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="230">
+          <caret line="88" column="23" selection-start-line="88" selection-start-column="23" selection-end-line="88" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/gameboard/board_test.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="183">
-          <caret line="40" column="5" lean-forward="true" selection-start-line="40" selection-start-column="5" selection-end-line="40" selection-end-column="5" />
+        <state relative-caret-position="228">
+          <caret line="43" selection-start-line="43" selection-end-line="50" selection-end-column="1" />
           <folding>
             <element signature="e#19#54#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/side/player_test.go">
+    <entry file="file://$PROJECT_DIR$/main_test.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" selection-start-line="1" selection-end-line="1" />
+        <state relative-caret-position="333">
+          <caret line="60" column="1" selection-start-line="60" selection-start-column="1" selection-end-line="60" selection-end-column="1" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/color/color.go">
+    <entry file="file://$PROJECT_DIR$/main.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="1" lean-forward="true" selection-start-line="8" selection-start-column="1" selection-end-line="8" selection-end-column="1" />
+        <state relative-caret-position="165">
+          <caret line="17" column="22" selection-start-line="17" selection-start-column="22" selection-end-line="17" selection-end-column="22" />
         </state>
       </provider>
     </entry>
@@ -473,32 +487,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/side/player.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="246">
-          <caret line="46" column="41" lean-forward="true" selection-start-line="46" selection-start-column="41" selection-end-line="46" selection-end-column="41" />
+        <state relative-caret-position="123">
+          <caret line="61" column="22" lean-forward="true" selection-start-line="61" selection-start-column="22" selection-end-line="61" selection-end-column="22" />
           <folding>
             <element signature="e#14#64#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main_test.go">
+    <entry file="file://$PROJECT_DIR$/side/player_test.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="333">
-          <caret line="60" column="1" selection-start-line="60" selection-start-column="1" selection-end-line="60" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gameboard/board.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="80" column="48" lean-forward="true" selection-start-line="80" selection-start-column="48" selection-end-line="80" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="16" column="48" selection-start-line="16" selection-start-column="48" selection-end-line="16" selection-end-column="48" />
+        <state relative-caret-position="210">
+          <caret line="14" column="26" selection-start-line="14" selection-start-column="26" selection-end-line="14" selection-end-column="26" />
+          <folding>
+            <element signature="e#14#68#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
