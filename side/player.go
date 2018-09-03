@@ -2,54 +2,49 @@ package side
 
 import (
 	"Chess/movement"
-	"Chess/piece"
 	"Chess/color"
 	"fmt"
 )
 
 type Player struct{
 	OccupiedPositions map[movement.Position]bool
-	Pieces []*piece.King
-	CheckmateKing *piece.King
+	CheckmateKing movement.Position
 	Color color.Color
-	AvailableMoves []movement.PossibleMove
 }
 
-func (player *Player) SetCheckmateKing(king *piece.King){
-	player.CheckmateKing = king
+func (player *Player) SetCheckmateKing(position movement.Position){
+	player.CheckmateKing = position
 }
 
 func NewPlayer(color color.Color) *Player {
 	player := &Player{}
 	player.OccupiedPositions = make(map[movement.Position]bool)
-	player.Pieces = []*piece.King{}
-	player.CheckmateKing = nil
+	player.CheckmateKing = movement.Position{}
 	player.Color = color
 	return player
 }
 
 func (player *Player) AddKing(position movement.Position, setAsCheckmateKing bool) {
 	player.OccupiedPositions[position] = true
-	king := piece.NewKing(position)
-	king.Position = position
-	player.Pieces = append(player.Pieces, king)
 	if setAsCheckmateKing {
-		player.SetCheckmateKing(king)
+		player.SetCheckmateKing(position)
 	}
 }
-func (player *Player) MovePieceXY(king *piece.King,xChange int, yChange int){
-	king.Position.X = king.Position.X + xChange
-	king.Position.Y = king.Position.Y + yChange
-	if !player.IsMoveValid(king.Position) {
-		fmt.Errorf("Move is not valid. New movement: %d", king.Position)
+func (player *Player) MovePieceXY(oldPosition movement.Position,xChange int, yChange int){
+	newPosition := movement.Position{oldPosition.X + xChange, oldPosition.Y + yChange}
+	if !player.IsMoveValid(newPosition) {
+		fmt.Errorf("Move is not valid. New movement: %d", newPosition)
 	}
 }
 
-func (player *Player) MovePieceToPosition(king *piece.King,position movement.Position){
-	king.Position = position
-	if !player.IsMoveValid(king.Position) {
-		fmt.Errorf("Move is not valid. New movement: %d", king.Position)
+func (player *Player) MovePieceToPosition(oldPosition movement.Position,newPosition movement.Position){
+	_, deleteWillWork := player.OccupiedPositions[oldPosition]
+	if !deleteWillWork {
+		panic("Old position is not in player's occupied positions.")
 	}
+	delete(player.OccupiedPositions,oldPosition)
+	player.OccupiedPositions[newPosition] = true
+	fmt.Println(player.OccupiedPositions)
 }
 
 func (player *Player) AddRowOfKings(row int){
@@ -77,16 +72,15 @@ func (player *Player) IsMoveValid(position movement.Position) bool {
 	return true
 }
 
-func (player *Player) CalculateBestMove(movesOccupiedByOtherColor map[movement.Position]bool) (movement.Position, *piece.King){
-	var kingToMove *piece.King = nil
+// TODO: FIX ME!  YOU NEED TO PROVIDE VALID POSITIONS FOR EACH OCCUPIED POSITION
+func (player *Player) CalculateBestMove(movesOccupiedByOtherColor map[movement.Position]bool) (movement.Position, movement.Position){
 	var bestMove movement.Position
-	for _,king := range player.Pieces {
-		for _, move := range king.Moves {
-			if player.IsMoveValid(move){
-				return move, king
+		for move, _ := range player.OccupiedPositions {
+			if player.IsMoveValid(move) {
+				panic("This needs to be fixed, returning two of the same moves right now")
+				return move,move
 			}
 		}
-	}
 	fmt.Errorf("Player is unable to move!  Player: %d", player.Color)
-	return bestMove, kingToMove
+	return bestMove, bestMove
 }

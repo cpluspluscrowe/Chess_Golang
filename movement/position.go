@@ -5,7 +5,6 @@ type Position struct {
 	Y int
 }
 
-type PossibleMove struct {
-	WouldTakePiece bool
-	Position Position
+func NewPosition(x int, y int) Position {
+	return Position{X: x, Y: y}
 }

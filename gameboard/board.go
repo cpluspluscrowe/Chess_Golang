@@ -4,7 +4,6 @@ import (
 	"fmt"
 			"Chess/side"
 	"Chess/movement"
-	"Chess/piece"
 )
 
 type Board struct {
@@ -27,11 +26,11 @@ func (p Board) String() string {
 		{"-","-","-","-","-","-","-","-",},
 		{"-","-","-","-","-","-","-","-",},
 	}
-	for _, position := range p.black.Pieces {
-		array[position.Position.Y][position.Position.X] = "b"
+	for position, _ := range p.black.OccupiedPositions {
+		array[position.Y][position.X] = "b"
 	}
-	for _, position := range p.white.Pieces {
-		array[position.Position.Y][position.Position.X] = "w"
+	for position, _ := range p.white.OccupiedPositions {
+		array[position.Y][position.X] = "w"
 	}
 	var playerString string
 	for _, row := range array {
@@ -41,26 +40,53 @@ func (p Board) String() string {
 }
 
 // will throw exception is there is not a piece to remove
-func (b *Board) RemovePiece(position movement.Position, playerTakingPiece *side.Player){
-	var sideToRemovePieceFrom *side.Player = b.getOpponent(playerTakingPiece)
-	verifyOtherPlayerHasPiece, _ := sideToRemovePieceFrom.OccupiedPositions[position]
+func (b *Board) RemovePiece(position movement.Position, playerLosingPiece *side.Player){
+	verifyOtherPlayerHasPiece, _ := playerLosingPiece.OccupiedPositions[position]
 	if !verifyOtherPlayerHasPiece {
 		panic("No piece at this location to remove!")
 	}
-	delete(sideToRemovePieceFrom.OccupiedPositions, position)
+	delete(playerLosingPiece.OccupiedPositions, position)
 }
 
-func (b *Board) IsPositionOccupied(position movement.Position, playerTakingPiece *side.Player) bool {
-	var sideToRemovePieceFrom *side.Player = b.getOpponent(playerTakingPiece)
-	verifyOtherPlayerHasPiece, _ := sideToRemovePieceFrom.OccupiedPositions[position]
+func (b *Board) isPositionOccupiedByOpponent(position movement.Position, playerWithPiece *side.Player) bool {
+	verifyOtherPlayerHasPiece, _ := playerWithPiece.OccupiedPositions[position]
 	return verifyOtherPlayerHasPiece
 }
 
-func (b *Board) MovePiece(player *side.Player, king *piece.King, newPosition movement.Position){
-	player.MovePieceToPosition(king, newPosition)
-	if b.IsPositionOccupied(newPosition, player){
-		b.RemovePiece(newPosition, player)
+func (b *Board) isPositionAlreadyOccupied(position movement.Position, playerWithPiece *side.Player) bool {
+	_, ok := playerWithPiece.OccupiedPositions[position]
+	return ok
+}
+
+func (b *Board) isOldPositionOccupied(player *side.Player, oldPosition movement.Position) bool {
+	return b.isPositionAlreadyOccupied(oldPosition, player)
+}
+
+func (b *Board) isNewPositionOccupied(player *side.Player, newPosition movement.Position) bool {
+	if(b.isPositionAlreadyOccupied(newPosition, player)){
+		return true
 	}
+	return false
+}
+
+func (b *Board) MovePiece(player *side.Player, oldPosition movement.Position, newPosition movement.Position){
+	opponent := b.getOpponent(player)
+	playerOccupiesOldPosition := b.isOldPositionOccupied(player, oldPosition)
+	playerAlreadyOccupiesNewPosition := b.isNewPositionOccupied(player, newPosition)
+	opponentOccupiesNewPosition := b.isNewPositionOccupied(opponent, newPosition)
+	if !player.IsMoveValid(newPosition) {
+		panic("Move is not valid. New movement: " + fmt.Sprintf("%v",newPosition))
+	}
+	if !playerOccupiesOldPosition{
+		panic("The passed oldPosition is not occupied by a piece.  You cannot move a piece that isn't there" + fmt.Sprintf("%v",oldPosition))
+	}
+	if playerAlreadyOccupiesNewPosition {
+		panic("Position is already occupied by player's pieces.  Occupied position: %d" + fmt.Sprintf("%v",newPosition))
+	}
+	if opponentOccupiesNewPosition {
+		b.RemovePiece(newPosition, opponent)
+	}
+	player.MovePieceToPosition(oldPosition, newPosition)
 }
 
 func (b *Board) getOpponent(player *side.Player) *side.Player {
@@ -75,9 +101,9 @@ func (b *Board) getOpponent(player *side.Player) *side.Player {
 
 func (b *Board) GetBestMove(player *side.Player){
 	opponent := b.getOpponent(player)
-	move, king := player.CalculateBestMove(opponent.OccupiedPositions)
-	if(b.IsPositionOccupied(move, player)){
-		b.RemovePiece(move, player)
+	oldPosition, newPosition := player.CalculateBestMove(opponent.OccupiedPositions)
+	if(b.isPositionOccupiedByOpponent(newPosition, player)){
+		b.RemovePiece(newPosition, player)
 	}
-	b.MovePiece(player, king, move)
+	b.MovePiece(player, oldPosition, newPosition)
 }
