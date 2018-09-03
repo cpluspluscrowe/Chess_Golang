@@ -58,22 +58,11 @@ func (b *Board) isPositionAlreadyOccupied(position movement.Position, playerWith
 	return ok
 }
 
-func (b *Board) isOldPositionOccupied(player *side.Player, oldPosition movement.Position) bool {
-	return b.isPositionAlreadyOccupied(oldPosition, player)
-}
-
-func (b *Board) isNewPositionOccupied(player *side.Player, newPosition movement.Position) bool {
-	if(b.isPositionAlreadyOccupied(newPosition, player)){
-		return true
-	}
-	return false
-}
-
 func (b *Board) MovePiece(player *side.Player, oldPosition movement.Position, newPosition movement.Position){
 	opponent := b.getOpponent(player)
-	playerOccupiesOldPosition := b.isOldPositionOccupied(player, oldPosition)
-	playerAlreadyOccupiesNewPosition := b.isNewPositionOccupied(player, newPosition)
-	opponentOccupiesNewPosition := b.isNewPositionOccupied(opponent, newPosition)
+	playerOccupiesOldPosition := b.isPositionAlreadyOccupied(oldPosition, player)
+	playerAlreadyOccupiesNewPosition := b.isPositionAlreadyOccupied(newPosition, player)
+	opponentOccupiesNewPosition := b.isPositionAlreadyOccupied(newPosition, opponent)
 	if !player.IsMoveValid(newPosition) {
 		panic("Move is not valid. New movement: " + fmt.Sprintf("%v",newPosition))
 	}
