@@ -55,6 +55,30 @@ func TestRemovePiece(t *testing.T){
 	}
 }
 
+func TestGetOpponent(t *testing.T){
+	white := side.NewPlayer(color.NewColor(false))
+	black := side.NewPlayer(color.NewColor(true))
+	blackKing := movement.NewPosition(0,0)
+	black.AddKing(blackKing, false)
+	b := NewBoard(white, black)
+	opponent := b.getOpponent(black)
+	if opponent != white {
+		t.Errorf("Opponent should be white ")
+	}
+}
+
+func TestNewBoard(t *testing.T){
+	white := side.NewPlayer(color.NewColor(false))
+	black := side.NewPlayer(color.NewColor(true))
+	blackKing := movement.NewPosition(0,0)
+	black.AddKing(blackKing, false)
+	b := NewBoard(white, black)
+	newBoard := &Board{white: white, black: black}
+	if b.white != newBoard.white && b.black != newBoard.black {
+		t.Errorf("Newboard constructor did not equal it")
+	}
+}
+
 func TestMovePiece(t *testing.T){
 	white := side.NewPlayer(color.NewColor(false))
 	black := side.NewPlayer(color.NewColor(true))
