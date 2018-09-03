@@ -3,16 +3,12 @@ package side
 import (
 	"Chess/movement"
 	"Chess/color"
-	)
+)
 
 type Player struct{
 	OccupiedPositions map[movement.Position]bool
 	CheckmateKing movement.Position
 	Color color.Color
-}
-
-func (player *Player) setCheckmateKing(position movement.Position){
-	player.CheckmateKing = position
 }
 
 func NewPlayer(color color.Color) *Player {
@@ -53,23 +49,34 @@ func (player *Player) IsMoveValid(position movement.Position) bool {
 	return true
 }
 
-func (player *Player) AddToPotentialMovesIfMoveIsValid(move movement.Position, potentialPositions *map[movement.Position]bool){
+func (player *Player) GetPotentialMoves() map[movement.Position]bool {
+	potentialPositions := make(map[movement.Position]bool)
+	for key, _ := range player.OccupiedPositions {
+		potentialPositions = player.addMovePotentialPositions(key, &potentialPositions)
+	}
+	return potentialPositions
+}
+
+func (player *Player) addToPotentialMovesIfMoveIsValid(move movement.Position, potentialPositions *map[movement.Position]bool){
 	if player.IsMoveValid(move){
 		(*potentialPositions)[move] = true
 	}
 }
 
-func (player *Player) addMovePotentialPositions(move movement.Position, potentialPositions *map[movement.Position]bool) *map[movement.Position]bool{
+func (player *Player) addMovePotentialPositions(move movement.Position, potentialPositions *map[movement.Position]bool) map[movement.Position]bool{
 	x := move.X
 	y := move.Y
-	player.AddToPotentialMovesIfMoveIsValid(movement.NewPosition(x-1,y-1),potentialPositions)
-	player.AddToPotentialMovesIfMoveIsValid(movement.NewPosition(x,y-1),potentialPositions)
-	player.AddToPotentialMovesIfMoveIsValid(movement.NewPosition(x+1,y-1),potentialPositions)
-	player.AddToPotentialMovesIfMoveIsValid(movement.NewPosition(x+1,y),potentialPositions)
-	player.AddToPotentialMovesIfMoveIsValid(movement.NewPosition(x+1,y+1),potentialPositions)
-	player.AddToPotentialMovesIfMoveIsValid(movement.NewPosition(x,y+1),potentialPositions)
-	player.AddToPotentialMovesIfMoveIsValid(movement.NewPosition(x-1,y+1),potentialPositions)
-	player.AddToPotentialMovesIfMoveIsValid(movement.NewPosition(x-1,y),potentialPositions)
-	return potentialPositions
+	player.addToPotentialMovesIfMoveIsValid(movement.NewPosition(x-1,y-1),potentialPositions)
+	player.addToPotentialMovesIfMoveIsValid(movement.NewPosition(x,y-1),potentialPositions)
+	player.addToPotentialMovesIfMoveIsValid(movement.NewPosition(x+1,y-1),potentialPositions)
+	player.addToPotentialMovesIfMoveIsValid(movement.NewPosition(x+1,y),potentialPositions)
+	player.addToPotentialMovesIfMoveIsValid(movement.NewPosition(x+1,y+1),potentialPositions)
+	player.addToPotentialMovesIfMoveIsValid(movement.NewPosition(x,y+1),potentialPositions)
+	player.addToPotentialMovesIfMoveIsValid(movement.NewPosition(x-1,y+1),potentialPositions)
+	player.addToPotentialMovesIfMoveIsValid(movement.NewPosition(x-1,y),potentialPositions)
+	return *potentialPositions
 }
 
+func (player *Player) setCheckmateKing(position movement.Position){
+	player.CheckmateKing = position
+}
