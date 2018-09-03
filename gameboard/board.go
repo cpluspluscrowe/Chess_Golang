@@ -39,18 +39,12 @@ func (p Board) String() string {
 	return fmt.Sprintf(playerString)
 }
 
-// will throw exception is there is not a piece to remove
 func (b *Board) RemovePiece(position movement.Position, playerLosingPiece *side.Player){
 	verifyOtherPlayerHasPiece, _ := playerLosingPiece.OccupiedPositions[position]
 	if !verifyOtherPlayerHasPiece {
 		panic("No piece at this location to remove!")
 	}
 	delete(playerLosingPiece.OccupiedPositions, position)
-}
-
-func (b *Board) isPositionOccupiedByOpponent(position movement.Position, playerWithPiece *side.Player) bool {
-	verifyOtherPlayerHasPiece, _ := playerWithPiece.OccupiedPositions[position]
-	return verifyOtherPlayerHasPiece
 }
 
 func (b *Board) isPositionAlreadyOccupied(position movement.Position, playerWithPiece *side.Player) bool {
@@ -86,13 +80,4 @@ func (b *Board) getOpponent(player *side.Player) *side.Player {
 		opponent = b.black
 	}
 	return opponent
-}
-
-func (b *Board) GetBestMove(player *side.Player){
-	opponent := b.getOpponent(player)
-	oldPosition, newPosition := player.CalculateBestMove(opponent.OccupiedPositions)
-	if(b.isPositionOccupiedByOpponent(newPosition, player)){
-		b.RemovePiece(newPosition, player)
-	}
-	b.MovePiece(player, oldPosition, newPosition)
 }
