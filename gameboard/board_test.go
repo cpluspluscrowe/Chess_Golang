@@ -55,6 +55,22 @@ func TestRemovePiece(t *testing.T){
 	}
 }
 
+func TestMovePiece(t *testing.T){
+	white := side.NewPlayer(color.NewColor(false))
+	black := side.NewPlayer(color.NewColor(true))
+	blackKing := movement.NewPosition(0,0)
+	black.AddKing(blackKing, false)
+	b := NewBoard(white, black)
+	newPosition := movement.NewPosition(1,1)
+	b.MovePiece(black, blackKing, newPosition)
+	//b.RemovePiece(blackKing, black)
+	shouldBeOccupied := b.isPositionAlreadyOccupied(movement.NewPosition(1,1), black)
+	shouldNotBeOccupied := b.isPositionAlreadyOccupied(movement.NewPosition(0,0), black)
+	if !shouldBeOccupied || shouldNotBeOccupied {
+		t.Errorf("Position should be occupied.  Occupied Positions for black: " + fmt.Sprintf("%v",black.OccupiedPositions))
+	}
+}
+
 func TestBoardToString(t *testing.T){
 	white := side.NewPlayer(color.NewColor(false))
 	black := side.NewPlayer(color.NewColor(true))
