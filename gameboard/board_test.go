@@ -47,5 +47,5 @@ func TestVerifyThatOldPositionIsOccupied(t *testing.T){
 	blackKing := movement.NewPosition(0,0)
 	black.AddKing(blackKing, false)
 	b := NewBoard(white, black)
-	b.isOldPositionOccupied(black,blackKing)
+	b.isPositionAlreadyOccupied(blackKing, black)
 }
