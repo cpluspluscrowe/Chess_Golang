@@ -11,8 +11,6 @@ func main(){
 	var black = side.NewPlayer(color.Color{true})
 	var white = side.NewPlayer(color.Color{false})
 	board := gameboard.NewBoard(white, black)
-	fmt.Println(white.ValidPotentialMoves)
-	fmt.Println(white.InvalidPotentialMoves)
 	DoSomeMovement(white, black)
 	fmt.Println(board)
 }
