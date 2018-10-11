@@ -2,7 +2,7 @@ package gameboard
 
 import (
 	"fmt"
-			"Chess/side"
+	"Chess/side"
 	"Chess/movement"
 )
 
@@ -12,7 +12,7 @@ type Board struct {
 }
 
 func NewBoard(white *side.Player, black *side.Player) *Board {
-	board := &Board{white:white, black:black}
+	board := &Board{white: white, black: black}
 	board.fillNewBoard(white, black)
 	white.SetPotentialMoves()
 	black.SetPotentialMoves()
@@ -21,14 +21,14 @@ func NewBoard(white *side.Player, black *side.Player) *Board {
 
 func (p Board) String() string {
 	array := [][]string{
-		{"-","-","-","-","-","-","-","-",},
-		{"-","-","-","-","-","-","-","-",},
-		{"-","-","-","-","-","-","-","-",},
-		{"-","-","-","-","-","-","-","-",},
-		{"-","-","-","-","-","-","-","-",},
-		{"-","-","-","-","-","-","-","-",},
-		{"-","-","-","-","-","-","-","-",},
-		{"-","-","-","-","-","-","-","-",},
+		{"-", "-", "-", "-", "-", "-", "-", "-",},
+		{"-", "-", "-", "-", "-", "-", "-", "-",},
+		{"-", "-", "-", "-", "-", "-", "-", "-",},
+		{"-", "-", "-", "-", "-", "-", "-", "-",},
+		{"-", "-", "-", "-", "-", "-", "-", "-",},
+		{"-", "-", "-", "-", "-", "-", "-", "-",},
+		{"-", "-", "-", "-", "-", "-", "-", "-",},
+		{"-", "-", "-", "-", "-", "-", "-", "-",},
 	}
 	for position, _ := range p.black.OccupiedPositions {
 		array[position.X][position.Y] = "b"
@@ -43,7 +43,7 @@ func (p Board) String() string {
 	return fmt.Sprintf(playerString)
 }
 
-func (b *Board) RemovePiece(position movement.Position, playerLosingPiece *side.Player){
+func (b *Board) RemovePiece(position movement.Position, playerLosingPiece *side.Player) {
 	verifyOtherPlayerHasPiece, _ := playerLosingPiece.OccupiedPositions[position]
 	if !verifyOtherPlayerHasPiece {
 		panic("No piece at this location to remove!")
@@ -56,19 +56,19 @@ func (b *Board) isPositionAlreadyOccupied(position movement.Position, playerWith
 	return ok
 }
 
-func (b *Board) MovePiece(player *side.Player, oldPosition movement.Position, newPosition movement.Position){
+func (b *Board) MovePiece(player *side.Player, oldPosition movement.Position, newPosition movement.Position) {
 	opponent := b.getOpponent(player)
 	playerOccupiesOldPosition := b.isPositionAlreadyOccupied(oldPosition, player)
 	playerAlreadyOccupiesNewPosition := b.isPositionAlreadyOccupied(newPosition, player)
 	opponentOccupiesNewPosition := b.isPositionAlreadyOccupied(newPosition, opponent)
 	if !player.IsMoveValid(newPosition) {
-		panic("Move is not valid. New movement: " + fmt.Sprintf("%v",newPosition))
+		panic("Move is not valid. New movement: " + fmt.Sprintf("%v", newPosition))
 	}
-	if !playerOccupiesOldPosition{
-		panic("The passed oldPosition is not occupied by a piece.  You cannot move a piece that isn't there" + fmt.Sprintf("%v",oldPosition))
+	if !playerOccupiesOldPosition {
+		panic("The passed oldPosition is not occupied by a piece.  You cannot move a piece that isn't there" + fmt.Sprintf("%v", oldPosition))
 	}
 	if playerAlreadyOccupiesNewPosition {
-		panic("Position is already occupied by player's pieces.  Occupied position: %d" + fmt.Sprintf("%v",newPosition))
+		panic("Position is already occupied by player's pieces.  Occupied position: %d" + fmt.Sprintf("%v", newPosition))
 	}
 	if opponentOccupiesNewPosition {
 		b.RemovePiece(newPosition, opponent)
@@ -78,21 +78,21 @@ func (b *Board) MovePiece(player *side.Player, oldPosition movement.Position, ne
 
 func (b *Board) getOpponent(player *side.Player) *side.Player {
 	var opponent *side.Player = nil
-	if(player.Color.IsBlack){
+	if (player.Color.IsBlack) {
 		opponent = b.white
-	}else{
+	} else {
 		opponent = b.black
 	}
 	return opponent
 }
 
-func (b *Board) fillNewBoard(white *side.Player, black *side.Player){
-	for row := 0; row < 2; row++{
+func (b *Board) fillNewBoard(white *side.Player, black *side.Player) {
+	for row := 0; row < 2; row++ {
 		for column := 0; column < 8; column++ {
 			white.AddKing(movement.NewPosition(row, column), false)
 		}
 	}
-	for row := 6; row < 8; row++{
+	for row := 6; row < 8; row++ {
 		for column := 0; column < 8; column++ {
 			black.AddKing(movement.NewPosition(row, column), false)
 		}
