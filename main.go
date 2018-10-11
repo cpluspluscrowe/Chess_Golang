@@ -8,8 +8,8 @@ import (
 )
 
 func main() {
-	var black = side.NewPlayer(color.Color{true})
-	var white = side.NewPlayer(color.Color{false})
+	var black = side.NewPlayer(color.NewColor("black"))
+	var white = side.NewPlayer(color.NewColor("white"))
 	board := gameboard.NewBoard(white, black)
 	DoSomeMovement(white, black)
 	fmt.Println(board)
