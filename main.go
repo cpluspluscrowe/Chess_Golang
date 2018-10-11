@@ -11,10 +11,10 @@ func main(){
 	var black = side.NewPlayer(color.Color{true})
 	var white = side.NewPlayer(color.Color{false})
 	board := gameboard.NewBoard(white, black)
-	potentialWhiteMoves := white.GetPotentialMoves()
-	fmt.Println(potentialWhiteMoves)
-	for currentPosition,potentialMoves := range potentialWhiteMoves {
-		for potentialMove,_ := range potentialMoves {
+	fmt.Println(white.ValidPotentialMoves)
+	fmt.Println(white.InvalidPotentialMoves)
+	for currentPosition,potentialMoves := range white.ValidPotentialMoves {
+		for _, potentialMove := range potentialMoves {
 			white.MovePieceToPosition(currentPosition,potentialMove)
 			break
 		}
