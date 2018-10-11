@@ -30,6 +30,19 @@ func (player *Player) AddKing(position movement.Position, setAsCheckmateKing boo
 	}
 }
 
+func (player *Player) adjustValidMoves(oldPosition movement.Position, newPosition movement.Position){
+	// if valid positions contains the new position, move them to invalid positions
+	if _, ok := player.ValidPotentialMoves[newPosition]; ok {
+		player.InvalidPotentialMoves[newPosition] = player.ValidPotentialMoves[newPosition]
+		delete(player.ValidPotentialMoves,newPosition)
+	}
+	// if the old position had invalid moves, then move those positions to valid, since the piece is no longer at that position
+	if _, ok := player.InvalidPotentialMoves[oldPosition]; ok {
+		player.ValidPotentialMoves[oldPosition] = player.InvalidPotentialMoves[oldPosition]
+		delete(player.InvalidPotentialMoves,newPosition)
+	}
+}
+
 func (player *Player) MovePieceToPosition(oldPosition movement.Position, newPosition movement.Position) {
 	_, deleteWillWork := player.OccupiedPositions[oldPosition]
 	if !deleteWillWork {
@@ -37,6 +50,7 @@ func (player *Player) MovePieceToPosition(oldPosition movement.Position, newPosi
 	}
 	delete(player.OccupiedPositions, oldPosition)
 	player.OccupiedPositions[newPosition] = true
+	player.adjustValidMoves(oldPosition, newPosition)
 }
 
 func (player *Player) IsMoveValid(position movement.Position) bool {

@@ -21,3 +21,5 @@ func main(){
 	}
 	fmt.Println(board)
 }
+
+// todo: after Moving a piece, adjust the valid and invalid map
