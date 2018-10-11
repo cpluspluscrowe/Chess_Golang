@@ -12,7 +12,9 @@ type Board struct {
 }
 
 func NewBoard(white *side.Player, black *side.Player) *Board {
-	return &Board{white:white, black:black}
+	board := &Board{white:white, black:black}
+	board.fillNewBoard(white, black)
+	return board
 }
 
 func (p Board) String() string {
@@ -27,10 +29,10 @@ func (p Board) String() string {
 		{"-","-","-","-","-","-","-","-",},
 	}
 	for position, _ := range p.black.OccupiedPositions {
-		array[position.Y][position.X] = "b"
+		array[position.X][position.Y] = "b"
 	}
 	for position, _ := range p.white.OccupiedPositions {
-		array[position.Y][position.X] = "w"
+		array[position.X][position.Y] = "w"
 	}
 	var playerString string
 	for _, row := range array {
@@ -80,4 +82,17 @@ func (b *Board) getOpponent(player *side.Player) *side.Player {
 		opponent = b.black
 	}
 	return opponent
+}
+
+func (b *Board) fillNewBoard(white *side.Player, black *side.Player){
+	for row := 0; row < 2; row++{
+		for column := 0; column < 8; column++ {
+			white.AddKing(movement.NewPosition(row, column), false)
+		}
+	}
+	for row := 6; row < 8; row++{
+		for column := 0; column < 8; column++ {
+			black.AddKing(movement.NewPosition(row, column), false)
+		}
+	}
 }
