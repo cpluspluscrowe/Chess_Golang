@@ -14,6 +14,8 @@ type Board struct {
 func NewBoard(white *side.Player, black *side.Player) *Board {
 	board := &Board{white:white, black:black}
 	board.fillNewBoard(white, black)
+	white.SetPotentialMoves()
+	black.SetPotentialMoves()
 	return board
 }
 

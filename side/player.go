@@ -65,7 +65,6 @@ func (player *Player) addToPotentialMovesIfMoveIsValid(currentPosition movement.
 	} else {
 		player.InvalidPotentialMoves[currentPosition] = append(player.InvalidPotentialMoves[currentPosition], newPosition)
 	}
-
 }
 
 func (player *Player) addMovePotentialPositions(move movement.Position) {
