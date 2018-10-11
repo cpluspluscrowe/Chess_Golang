@@ -5,13 +5,19 @@ import (
 	"Chess/side"
 	"Chess/color"
 	"Chess/gameboard"
-	"Chess/movement"
-)
+	)
 
 func main(){
 	var black = side.NewPlayer(color.Color{true})
 	var white = side.NewPlayer(color.Color{false})
 	board := gameboard.NewBoard(white, black)
-	board.MovePiece(white, movement.Position{1,2},movement.Position{2,2})
+	potentialWhiteMoves := white.GetPotentialMoves()
+	fmt.Println(potentialWhiteMoves)
+	for currentPosition,potentialMoves := range potentialWhiteMoves {
+		for potentialMove,_ := range potentialMoves {
+			white.MovePieceToPosition(currentPosition,potentialMove)
+			break
+		}
+	}
 	fmt.Println(board)
 }

@@ -3,6 +3,7 @@ package side
 import (
 	"Chess/movement"
 	"Chess/color"
+	"fmt"
 )
 
 type Player struct{
@@ -49,31 +50,40 @@ func (player *Player) IsMoveValid(position movement.Position) bool {
 	return true
 }
 
-func (player *Player) GetPotentialMoves() map[movement.Position]bool {
-	potentialPositions := make(map[movement.Position]bool)
+func (player *Player) GetPotentialMoves() map[movement.Position]map[movement.Position]bool {
+	potentialPositions := make(map[movement.Position]map[movement.Position]bool)
 	for key, _ := range player.OccupiedPositions {
 		potentialPositions = player.addMovePotentialPositions(key, &potentialPositions)
+		fmt.Println(len(potentialPositions))
 	}
 	return potentialPositions
 }
 
-func (player *Player) addToPotentialMovesIfMoveIsValid(move movement.Position, potentialPositions *map[movement.Position]bool){
-	if player.IsMoveValid(move){
-		(*potentialPositions)[move] = true
+// store if the move is valid as the final value
+// the goal is to update the validity of all positions with each move
+// This means that we want to keep a map of position -> list of pieces so I can change move validity
+// I'll want two maps.  One with valid moves and one with invalid moves.  I can shuffle between valid and invalid with each move
+// makes each move a constant time change to keep a map of possible moves on the board!  Not O(n), since that much interference is impossible, maybe ~4 shuffles per change
+func (player *Player) addToPotentialMovesIfMoveIsValid(currentPosition movement.Position,newPosition movement.Position, potentialPositions *map[movement.Position]map[movement.Position]bool){
+	isValid := player.IsMoveValid(newPosition)
+	// if the inner hashset does not exist, create the map before populating it
+	if _, ok := (*potentialPositions)[currentPosition]; !ok {
+		(*potentialPositions)[currentPosition] = make(map[movement.Position]bool)
 	}
+	(*potentialPositions)[currentPosition][newPosition] = isValid
 }
 
-func (player *Player) addMovePotentialPositions(move movement.Position, potentialPositions *map[movement.Position]bool) map[movement.Position]bool{
+func (player *Player) addMovePotentialPositions(move movement.Position, potentialPositions *map[movement.Position]map[movement.Position]bool) map[movement.Position]map[movement.Position]bool {
 	x := move.X
 	y := move.Y
-	player.addToPotentialMovesIfMoveIsValid(movement.NewPosition(x-1,y-1),potentialPositions)
-	player.addToPotentialMovesIfMoveIsValid(movement.NewPosition(x,y-1),potentialPositions)
-	player.addToPotentialMovesIfMoveIsValid(movement.NewPosition(x+1,y-1),potentialPositions)
-	player.addToPotentialMovesIfMoveIsValid(movement.NewPosition(x+1,y),potentialPositions)
-	player.addToPotentialMovesIfMoveIsValid(movement.NewPosition(x+1,y+1),potentialPositions)
-	player.addToPotentialMovesIfMoveIsValid(movement.NewPosition(x,y+1),potentialPositions)
-	player.addToPotentialMovesIfMoveIsValid(movement.NewPosition(x-1,y+1),potentialPositions)
-	player.addToPotentialMovesIfMoveIsValid(movement.NewPosition(x-1,y),potentialPositions)
+	player.addToPotentialMovesIfMoveIsValid(move, movement.NewPosition(x-1,y-1),potentialPositions)
+	player.addToPotentialMovesIfMoveIsValid(move, movement.NewPosition(x,y-1),potentialPositions)
+	player.addToPotentialMovesIfMoveIsValid(move, movement.NewPosition(x+1,y-1),potentialPositions)
+	player.addToPotentialMovesIfMoveIsValid(move, movement.NewPosition(x+1,y),potentialPositions)
+	player.addToPotentialMovesIfMoveIsValid(move, movement.NewPosition(x+1,y+1),potentialPositions)
+	player.addToPotentialMovesIfMoveIsValid(move, movement.NewPosition(x,y+1),potentialPositions)
+	player.addToPotentialMovesIfMoveIsValid(move, movement.NewPosition(x-1,y+1),potentialPositions)
+	player.addToPotentialMovesIfMoveIsValid(move, movement.NewPosition(x-1,y),potentialPositions)
 	return *potentialPositions
 }
 
