@@ -87,12 +87,12 @@ func (b *Board) getOpponent(player *side.Player) *side.Player {
 }
 
 func (b *Board) fillNewBoard(white *side.Player, black *side.Player) {
-	for row := 0; row < 2; row++ {
+	for row := 0; row < 1; row++ {
 		for column := 0; column < 8; column++ {
 			white.AddKing(movement.NewPosition(row, column), false)
 		}
 	}
-	for row := 6; row < 8; row++ {
+	for row := 6; row < 7; row++ {
 		for column := 0; column < 8; column++ {
 			black.AddKing(movement.NewPosition(row, column), false)
 		}

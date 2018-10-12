@@ -9,6 +9,7 @@ type Player struct {
 	OccupiedPositions     map[movement.Position]bool
 	ValidPotentialMoves   map[movement.Position]map[movement.Position]bool // stores potential move, hashset of current positions
 	InvalidPotentialMoves map[movement.Position]map[movement.Position]bool
+	potentialPositionToCurrentPosition map[movement.Position]map[movement.Position]bool
 	CheckmateKing         movement.Position
 	Color                 color.Color
 }
@@ -18,6 +19,7 @@ func NewPlayer(color color.Color) *Player {
 	player.OccupiedPositions = make(map[movement.Position]bool)
 	player.ValidPotentialMoves = make(map[movement.Position]map[movement.Position]bool)
 	player.InvalidPotentialMoves = make(map[movement.Position]map[movement.Position]bool)
+	player.potentialPositionToCurrentPosition = make(map[movement.Position]map[movement.Position]bool)
 	player.CheckmateKing = movement.Position{}
 	player.Color = color
 	return player
@@ -31,16 +33,26 @@ func (player *Player) AddKing(position movement.Position, setAsCheckmateKing boo
 }
 
 func (player *Player) adjustValidMoves(oldPosition movement.Position, newPosition movement.Position) {
-	// if valid positions contains the new position, move them to invalid positions
-	if _, ok := player.ValidPotentialMoves[newPosition]; ok {
-		player.InvalidPotentialMoves[newPosition] = player.ValidPotentialMoves[newPosition]
-		delete(player.ValidPotentialMoves, newPosition)
+	currentPositionsWithPotentialToMoveHere := player.potentialPositionToCurrentPosition[oldPosition] // check for potential moves targeted at the piece's old position
+	for currentPositionWithPotentialToMoveHere := range currentPositionsWithPotentialToMoveHere {
+		if _, ok := player.InvalidPotentialMoves[currentPositionWithPotentialToMoveHere][newPosition]; !ok {
+			panic("The move should exist in player.InvalidPotentialMoves, since the old position was filled")
+			delete(player.InvalidPotentialMoves[currentPositionWithPotentialToMoveHere],newPosition)
+		}
+		player.ValidPotentialMoves[currentPositionWithPotentialToMoveHere][oldPosition] = true
 	}
-	// if the old position had invalid moves, then move those positions to valid, since the piece is no longer at that position
-	if _, ok := player.InvalidPotentialMoves[oldPosition]; ok {
-		player.ValidPotentialMoves[oldPosition] = player.InvalidPotentialMoves[oldPosition]
-		delete(player.InvalidPotentialMoves, newPosition)
+	currentPositionOfPiecesTargetingWhereTheNewPieceWasMoved := player.potentialPositionToCurrentPosition[newPosition]
+	for currentPiecePosition := range currentPositionOfPiecesTargetingWhereTheNewPieceWasMoved {
+		if _, ok := player.ValidPotentialMoves[currentPiecePosition][newPosition]; !ok {
+			panic("The move should exist in player.ValidPotentialMoves, since the new position was not taken until just now")
+			delete(player.InvalidPotentialMoves[currentPiecePosition],newPosition)
+		}
+		player.InvalidPotentialMoves[currentPiecePosition][newPosition] = false
 	}
+	// now that the piece has moved, there are no potential moves that begin at the old position.
+	delete(player.ValidPotentialMoves,oldPosition)
+	// now recalcualte potential moves from the piece's new position
+	player.addMovePotentialPositions(newPosition)
 }
 
 func (player *Player) MovePieceToPosition(oldPosition movement.Position, newPosition movement.Position) {
@@ -73,19 +85,21 @@ func (player *Player) SetPotentialMoves() {
 	}
 }
 
-func addToPotentialPositionMap(potentialMoveMap map[movement.Position]map[movement.Position]bool,currentPosition movement.Position, newPosition movement.Position){
+func (player *Player) addToPotentialPositionMap(potentialMoveMap map[movement.Position]map[movement.Position]bool,currentPosition movement.Position, newPosition movement.Position, isValid bool){
 	if _, ok := potentialMoveMap[currentPosition]; ok {
 		potentialMoveMap[currentPosition][newPosition] = true
+		player.potentialPositionToCurrentPosition[newPosition][currentPosition] = isValid
 	}else{
 		potentialMoveMap[currentPosition] = make(map[movement.Position]bool)
+		player.potentialPositionToCurrentPosition[newPosition] = make(map[movement.Position]bool)
 	}
 }
 
 func (player *Player) addToPotentialMovesIfMoveIsValid(currentPosition movement.Position, newPosition movement.Position) {
-	if (player.IsMoveValid(newPosition)) {
-		addToPotentialPositionMap(player.ValidPotentialMoves, currentPosition, newPosition)
+	if player.IsMoveValid(newPosition) {
+		player.addToPotentialPositionMap(player.ValidPotentialMoves, currentPosition, newPosition, true)
 	} else {
-		addToPotentialPositionMap(player.InvalidPotentialMoves, currentPosition, newPosition)
+		player.addToPotentialPositionMap(player.InvalidPotentialMoves, currentPosition, newPosition, false)
 	}
 }
 
