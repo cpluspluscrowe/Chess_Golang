@@ -7,8 +7,8 @@ import (
 
 type Player struct {
 	OccupiedPositions     map[movement.Position]bool
-	ValidPotentialMoves   map[movement.Position][]movement.Position // stores potential move, list of current positions
-	InvalidPotentialMoves map[movement.Position][]movement.Position
+	ValidPotentialMoves   map[movement.Position]map[movement.Position]bool // stores potential move, hashset of current positions
+	InvalidPotentialMoves map[movement.Position]map[movement.Position]bool
 	CheckmateKing         movement.Position
 	Color                 color.Color
 }
@@ -16,8 +16,8 @@ type Player struct {
 func NewPlayer(color color.Color) *Player {
 	player := &Player{}
 	player.OccupiedPositions = make(map[movement.Position]bool)
-	player.ValidPotentialMoves = make(map[movement.Position][]movement.Position)
-	player.InvalidPotentialMoves = make(map[movement.Position][]movement.Position)
+	player.ValidPotentialMoves = make(map[movement.Position]map[movement.Position]bool)
+	player.InvalidPotentialMoves = make(map[movement.Position]map[movement.Position]bool)
 	player.CheckmateKing = movement.Position{}
 	player.Color = color
 	return player
@@ -73,11 +73,19 @@ func (player *Player) SetPotentialMoves() {
 	}
 }
 
+func addToPotentialPositionMap(potentialMoveMap map[movement.Position]map[movement.Position]bool,currentPosition movement.Position, newPosition movement.Position){
+	if _, ok := potentialMoveMap[currentPosition]; ok {
+		potentialMoveMap[currentPosition][newPosition] = true
+	}else{
+		potentialMoveMap[currentPosition] = make(map[movement.Position]bool)
+	}
+}
+
 func (player *Player) addToPotentialMovesIfMoveIsValid(currentPosition movement.Position, newPosition movement.Position) {
 	if (player.IsMoveValid(newPosition)) {
-		player.ValidPotentialMoves[currentPosition] = append(player.ValidPotentialMoves[currentPosition], newPosition)
+		addToPotentialPositionMap(player.ValidPotentialMoves, currentPosition, newPosition)
 	} else {
-		player.InvalidPotentialMoves[currentPosition] = append(player.InvalidPotentialMoves[currentPosition], newPosition)
+		addToPotentialPositionMap(player.InvalidPotentialMoves, currentPosition, newPosition)
 	}
 }
 

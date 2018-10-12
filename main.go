@@ -7,6 +7,7 @@ import (
 	"Chess/gameboard"
 )
 
+// todo: One a piece moves, update a piece's valid moves, and eliminate its old potential moves from Valid/Invalid moves for that side.Player
 func main() {
 	var black = side.NewPlayer(color.NewColor("black"))
 	var white = side.NewPlayer(color.NewColor("white"))
@@ -15,10 +16,9 @@ func main() {
 	fmt.Println(board)
 }
 
-// todo: fix exception when removing break on line 25, something about trying to move from a position not already occupied
 func DoSomeMovement(white *side.Player, black *side.Player) {
 	for currentPosition, potentialMoves := range white.ValidPotentialMoves {
-		for _, potentialMove := range potentialMoves {
+		for potentialMove,_ := range potentialMoves {
 			white.MovePieceToPosition(currentPosition, potentialMove)
 			break
 		}
